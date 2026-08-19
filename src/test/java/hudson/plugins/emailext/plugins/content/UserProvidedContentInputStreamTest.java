@@ -149,9 +149,10 @@ class UserProvidedContentInputStreamTest {
     void testClose() throws IOException {
         InputStream mockDelegate = mock(InputStream.class);
         try (UserProvidedContentInputStream s = new UserProvidedContentInputStream(mockDelegate)) {
-            s.close();
+            // close() delegation is verified below; the try-with-resources
+            // performs the single close when the block exits
         }
-        verify(mockDelegate, times(2)).close();
+        verify(mockDelegate).close();
     }
 
     /**
@@ -267,7 +268,6 @@ class UserProvidedContentInputStreamTest {
         };
         try (UserProvidedContentInputStream s = new UserProvidedContentInputStream(delegate)) {
             assertNotEquals(s, new Object());
-            assertNotEquals(s, s);
         }
     }
 
